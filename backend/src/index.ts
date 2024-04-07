@@ -1,6 +1,11 @@
 import express, {Request, Response} from "express";
 import cors from "cors";
 import "dotenv/config"
+import mongoose from "mongoose";
+
+mongoose
+    .connect(process.env.MONGODB_CONNECTION_STRING as string)
+    .then(() => console.log("Connected to database!"))
 
 // Middleware - Converts body of any request we make to our API server to JSON
 const app = express();
