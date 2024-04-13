@@ -13,7 +13,7 @@ const HomePage = () => {
 			{/* Photo Grid */}
 			<div className="grid md:grid-cols-2 gap-5">
 				<img src={landingImage} />
-				<div className="flex flex-col items-center justify-center gap-4 text-center font-poppins">
+				<div className="flex flex-col items-center justify-center gap-5 text-center font-poppins">
 					<span className="font-bold text-3xl tracking-tighter font-poppins">Order takeaway even faster!</span>
 					<span>Download the Deliverrr App for faster ordering and personalized recommendations</span>
 					<img src={appDownloadImage} />
