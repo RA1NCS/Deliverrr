@@ -11,22 +11,26 @@ type CreateUserRequest = {
 export const useCreateMyUser = () => {
 	const { getAccessTokenSilently } = useAuth0();
 
+	// This function sends user data to the server to create a new user account
 	const createMyUserRequest = async (user: CreateUserRequest) => {
+		// Getting an access token to authorize the API request
 		const accessToken = await getAccessTokenSilently();
 		const response = await fetch(`${API_BASE_URL}/api/my/user`, {
 			method: 'POST',
 			headers: {
-				Authorization: `Bearer ${accessToken}`,
+				Authorization: `Bearer ${accessToken}`, // The token proves the request is allowed
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify(user),
 		});
 
+		// If the server responds with an error, we throw an error
 		if (!response.ok) {
 			throw new Error('Failed to create user');
 		}
 	};
 
+	// React Query's useMutation is used here to manage the user creation process
 	const {
 		mutateAsync: createUser,
 		isLoading,
