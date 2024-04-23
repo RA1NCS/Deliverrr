@@ -1,10 +1,29 @@
 import { Request, Response } from 'express';
 import User from '../models/user';
 
-// Function to ensure a user exists in the database or create one if not
+// Fetches the user's details from the database
+const getCurrentUser = async (req: Request, res: Response) => {
+	try {
+		const currentUser = await User.findOne({ _id: req.userId });
+
+		if (!currentUser) {
+			return res
+				.status(404)
+				.json({ message: 'User Not Found' });
+		}
+
+		res.json(currentUser);
+	} catch (error) {
+		console.log(error);
+		return res
+			.status(500)
+			.json({ message: 'Error Fetching User Details' });
+	}
+};
+
+// Creates a new user if one doesn't exist with the provided Auth0 ID, or returns if it does
 const createCurrentUser = async (req: Request, res: Response) => {
 	try {
-		// Check for existing user or create a new one
 		const { auth0Id } = req.body;
 		const existingUser = await User.findOne({ auth0Id });
 
@@ -16,12 +35,12 @@ const createCurrentUser = async (req: Request, res: Response) => {
 		await newUser.save();
 		res.status(201).json(newUser.toObject());
 	} catch (error) {
-		// Handle errors by logging and sending a 500 response
 		console.log(error);
 		res.status(500).json({ message: 'Error Creating User' });
 	}
 };
 
+// Updates an existing user's details if they are found in the database
 const updateCurrentUser = async (req: Request, res: Response) => {
 	try {
 		const { name, addressLine1, country, city } = req.body;
@@ -41,13 +60,13 @@ const updateCurrentUser = async (req: Request, res: Response) => {
 		await user.save();
 		res.send(user);
 	} catch (error) {
-		// Handle errors by logging and sending a 500 response
 		console.log(error);
 		res.status(500).json({ message: 'Error Updating User' });
 	}
 };
 
 export default {
+	getCurrentUser,
 	createCurrentUser,
 	updateCurrentUser,
 };

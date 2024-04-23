@@ -10,10 +10,13 @@ import {
 	FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { User } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+// Define a schema for the form data using Zod, setting validation rules for each field
 const formSchema = z.object({
 	email: z.string().optional(),
 	name: z.string().min(1, 'Name is Required'),
@@ -23,23 +26,33 @@ const formSchema = z.object({
 });
 
 type UserFormData = z.infer<typeof formSchema>;
-
 type Props = {
+	currentUser: User;
 	onSave: (userProfileData: UserFormData) => void;
 	isLoading: boolean;
 };
 
-const userProfileForm = ({ onSave, isLoading }: Props) => {
+// Functional component for user profile form
+const userProfileForm = ({ onSave, isLoading, currentUser }: Props) => {
+	// Initialize form and pre-propulate current user values from database
 	const form = useForm<UserFormData>({
 		resolver: zodResolver(formSchema),
+		defaultValues: currentUser,
 	});
 
+	// If the component re-renders and the user changes, the form is re-rendered based on new data
+	useEffect(() => {
+		form.reset(currentUser);
+	}, [currentUser, form]);
+
 	return (
+		// Form component handling submission and structure
 		<Form {...form}>
 			<form
 				onSubmit={form.handleSubmit(onSave)}
 				className="space-y-4 bg-gray-50 rounded-lg md:p-10 font-poppins"
 			>
+				{/* Form header */}
 				<div>
 					<h2 className="text-2xl font-bold">
 						User Profile Form
@@ -49,7 +62,8 @@ const userProfileForm = ({ onSave, isLoading }: Props) => {
 						information here
 					</FormDescription>
 				</div>
-				{/* E-Mail */}
+
+				{/* Email input field, not editable */}
 				<FormField
 					control={form.control}
 					name="email"
@@ -68,7 +82,8 @@ const userProfileForm = ({ onSave, isLoading }: Props) => {
 						</FormItem>
 					)}
 				/>
-				{/* Name */}
+
+				{/* Name input field */}
 				<FormField
 					control={form.control}
 					name="name"
@@ -87,8 +102,10 @@ const userProfileForm = ({ onSave, isLoading }: Props) => {
 						</FormItem>
 					)}
 				/>
-				{/* Address Line 1 */}
+
+				{/* Address inputs - Address line, City, and Country in a flexible row layout */}
 				<div className="flex flex-col md:flex-row gap-4">
+					{/* Address Line 1 input field */}
 					<FormField
 						control={form.control}
 						name="addressLine1"
@@ -108,7 +125,8 @@ const userProfileForm = ({ onSave, isLoading }: Props) => {
 							</FormItem>
 						)}
 					/>
-					{/* City */}
+
+					{/* City input field */}
 					<FormField
 						control={form.control}
 						name="city"
@@ -127,7 +145,8 @@ const userProfileForm = ({ onSave, isLoading }: Props) => {
 							</FormItem>
 						)}
 					/>
-					{/* Country */}
+
+					{/* Country input field */}
 					<FormField
 						control={form.control}
 						name="country"
@@ -148,6 +167,7 @@ const userProfileForm = ({ onSave, isLoading }: Props) => {
 					/>
 				</div>
 
+				{/* Conditional rendering of LoadingButton or regular Button based on isLoading prop */}
 				{isLoading ? (
 					<LoadingButton />
 				) : (

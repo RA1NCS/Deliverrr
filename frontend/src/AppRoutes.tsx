@@ -3,6 +3,7 @@ import Layout from './layouts/layout';
 import HomePage from './pages/HomePage';
 import AuthCallbackPage from './pages/AuthCallbackPage';
 import UserProfilePage from './pages/UserProfilePage';
+import ProtectedRoute from './auth/ProtectedRoute';
 
 const AppRoutes = () => {
 	return (
@@ -21,15 +22,19 @@ const AppRoutes = () => {
 				path="/auth-callback"
 				element={<AuthCallbackPage />}
 			/>
-			{/* Route for a user profile page */}
-			<Route
-				path="/user-profile"
-				element={
-					<Layout>
-						<UserProfilePage />
-					</Layout>
-				}
-			/>
+
+			{/* Handing route protection for redirecting unauthenticated users to the homepage */}
+			<Route element={<ProtectedRoute />}>
+				{/* Route for a user profile page */}
+				<Route
+					path="/user-profile"
+					element={
+						<Layout>
+							<UserProfilePage />
+						</Layout>
+					}
+				/>
+			</Route>
 			{/* Error 404 Routes*/}
 			<Route
 				path="*"

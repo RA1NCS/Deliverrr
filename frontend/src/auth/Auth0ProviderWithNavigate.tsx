@@ -6,25 +6,24 @@ type Props = {
 };
 
 const Auth0ProviderWithNavigate = ({ children }: Props) => {
-	// Use the useNavigate hook from React Router for programmatic navigation
+	// Hook for navigation and environment variables for Auth0 configuration
 	const navigate = useNavigate();
-
 	const domain = import.meta.env.VITE_AUTH0_DOMAIN;
 	const clientID = import.meta.env.VITE_AUTH0_CLIENT_ID;
 	const redirectUri = import.meta.env.VITE_AUTH_CALLBACK_URL;
 	const audience = import.meta.env.VITE_AUTH0_AUDIENCE;
 
-	// Check if all necessary environment variables are provided
+	// Validate environment setup
 	if (!domain || !clientID || !redirectUri || !audience) {
 		throw new Error('Unable To Initialize Authentication');
 	}
 
-	// Define what happens after Auth0 authenticates the user and redirects back
+	// Navigate to '/auth-callback' after successful authentication
 	const onRedirectCallback = () => {
 		navigate('/auth-callback');
 	};
 
-	// Provide Auth0 authentication context to the application
+	// Auth0Provider wraps the children with authentication context
 	return (
 		<Auth0Provider
 			domain={domain}

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { body, validationResult } from 'express-validator';
 
+// Middleware to handle validation errors in the request body
 const handleValidationErrors = async (
 	req: Request,
 	res: Response,
@@ -8,11 +9,13 @@ const handleValidationErrors = async (
 ) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
+		// Return a 400 error response if validation fails
 		return res.status(400).json({ errors: errors.array() });
 	}
-	next();
+	next(); // Proceed to the next middleware if no errors
 };
 
+// Define validation rules for user data in requests
 export const validateMyUserRequest = [
 	body('name').isString().notEmpty().withMessage('Name Must Be A String'),
 	body('addressLine1')
@@ -24,5 +27,5 @@ export const validateMyUserRequest = [
 		.isString()
 		.notEmpty()
 		.withMessage('Country Must Be A String'),
-	handleValidationErrors,
+	handleValidationErrors, // Apply the custom error handling middleware to the validation chain
 ];

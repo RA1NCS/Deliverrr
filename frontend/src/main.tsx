@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
 import './global.css';
 import { BrowserRouter as Router } from 'react-router-dom';
 import AppRoutes from './AppRoutes.tsx';
 import Auth0ProviderWithNavigate from './auth/Auth0ProviderWithNavigate.tsx';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { Toaster } from 'sonner';
 
 /*
  * This part of the application sets up the foundational components and libraries needed to run a React application.
@@ -31,6 +31,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 			<QueryClientProvider client={queryClient}>
 				<Auth0ProviderWithNavigate>
 					<AppRoutes />
+					<Toaster
+						visibleToasts={1}
+						position="top-right"
+						richColors
+					/>
 				</Auth0ProviderWithNavigate>
 			</QueryClientProvider>
 		</Router>
