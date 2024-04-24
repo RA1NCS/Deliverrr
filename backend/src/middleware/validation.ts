@@ -29,3 +29,32 @@ export const validateMyUserRequest = [
 		.withMessage('Country Must Be A String'),
 	handleValidationErrors, // Apply the custom error handling middleware to the validation chain
 ];
+
+// Define validation rules for restaurant data in requests
+export const ValidateMyRestaurantRequest = [
+	body('restaurantName').notEmpty().withMessage('Restaurant Name Is Required'),
+	body('city').notEmpty().withMessage('Restaurant City Is Required'),
+	body('country').notEmpty().withMessage('Restaurant Country Is Required'),
+	body('deliveryPrice')
+		.isFloat({ min: 0 })
+		.withMessage('Delivery Price Must Be A Positive Number'),
+	body('deliveryTime')
+		.isInt({ min: 0 })
+		.withMessage('Estimated Delivery Time Must Be A Positive Number'),
+	body('cuisines')
+		.isArray()
+		.withMessage('Cuisines Must Be An Array')
+		.not()
+		.isEmpty()
+		.withMessage('Cuisines Array Cannot Be Empty'),
+	body('menuItems').isArray().withMessage('Menu Items Must Be An Array'),
+	body('menuItems.*.name')
+		.notEmpty()
+		.withMessage('Menu Item Name Is Required'),
+	body('menuItems.*.price')
+		.isFloat({ min: 0 })
+		.withMessage(
+			'Menu Item Price Is Required And Must Be A Positive Number'
+		),
+	handleValidationErrors, // Apply the custom error handling middleware to the validation chain
+];

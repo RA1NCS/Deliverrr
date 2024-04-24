@@ -41,12 +41,12 @@ export const useGetMyUser = () => {
 			);
 
 			if (!response.ok) {
-				throw new Error('Failed to Fetch User');
+				throw new Error('Failed To Fetch User');
 			}
 
 			return response.json();
 		} catch (e) {
-			console.error('Fetch error:', e);
+			console.error('Fetch Error:', e);
 			throw e;
 		}
 	};
@@ -85,7 +85,7 @@ export const useCreateMyUser = () => {
 
 		// If the server responds with an error, we throw an error
 		if (!response.ok) {
-			throw new Error('Failed to create user');
+			throw new Error('Failedt To Create User');
 		}
 	};
 
@@ -123,7 +123,7 @@ export const useUpdateMyUser = () => {
 		});
 
 		if (!response.ok) {
-			throw new Error('Failed to Update User');
+			throw new Error('Failed To Update User');
 		}
 
 		return response.json();
