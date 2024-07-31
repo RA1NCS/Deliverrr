@@ -19,10 +19,10 @@ const upload = multer({
 // Route to create a restaurant entry. This route chain includes several middlewares.
 router.post(
 	'/',
+	upload.single('imageFile'),
 	ValidateMyRestaurantRequest,
 	jwtCheck,
 	jwtParse,
-	upload.single('imageFile'),
 	MyRestaurantController.createMyRestaurant
 );
 
